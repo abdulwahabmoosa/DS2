@@ -24,23 +24,25 @@ int main() {
     // TicketManager ticketManager;
     // PlayerWithdrawals withdrawalManager;
     // MatchHistory matchHistory;
-
+/*
+    Do your code in separate files including your menu and only call your main in the below code
+*/
     do {
         displayMenu();
         cin >> choice;
         
         switch (choice) {
             case 1:
-                // scheduler.manageSchedule();
+                // Ahmed
                 break;
             case 2:
-                // ticketManager.processTickets();
+                // Akira
                 break;
             case 3:
-                // withdrawalManager.handleWithdrawals();
+                // Kashave
                 break;
             case 4:
-                // matchHistory.recordMatch();
+                // Abdulwahab
                 break;
             case 5:
                 cout << "Exiting the system. Goodbye!" << endl;
