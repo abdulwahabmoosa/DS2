@@ -2,127 +2,129 @@
 #include <string>
 using namespace std;
 
-// Custom Circular Queue Class
-class CircularQueue {
-private:
-    string* players; // Array to hold players
-    int front;       // Front index
-    int rear;        // Rear index
-    int capacity;    // Max size of the queue
-    int size;        // Current number of elements
-
-public:
-    // Constructor
-    CircularQueue(int groupSize) {
-        capacity = groupSize;
-        players = new string[capacity];
-        front = rear = -1;
-        size = 0;
-    }
-
-    // Destructor
-    ~CircularQueue() {
-        delete[] players;
-    }
-
-    // Check if the queue is empty
-    bool isEmpty() {
-        return size == 0;
-    }
-
-    // Check if the queue is full
-    bool isFull() {
-        return size == capacity;
-    }
-
-    // Add a player to the queue
-    void enqueue(string player) {
-        if (isFull()) {
-            cout << "Queue is full!" << endl;
-            return;
-        }
-        if (isEmpty()) front = 0;
-        rear = (rear + 1) % capacity;
-        players[rear] = player;
-        size++;
-    }
-
-    // Remove a player from the queue
-    string dequeue() {
-        if (isEmpty()) {
-            cout << "Queue is empty!" << endl;
-            return "";
-        }
-        string player = players[front];
-        if (front == rear) {
-            front = rear = -1;
-        } else {
-            front = (front + 1) % capacity;
-        }
-        size--;
-        return player;
-    }
-
-    // Rotate the queue (shift all elements except the first)
-    void rotate() {
-        if (size <= 1) return; // No rotation needed for single player
-
-        // Store the first player
-        string first = dequeue();
-
-        // Rotate the remaining players
-        enqueue(dequeue());
-
-        // Re-add the first player to the front
-        front = (front - 1 + capacity) % capacity;
-        players[front] = first;
-        size++;
-    }
-
-    // Display the current queue
-    void display() {
-        if (isEmpty()) {
-            cout << "Queue is empty!" << endl;
-            return;
-        }
-        int index = front;
-        for (int i = 0; i < size; i++) {
-            cout << "[" << players[index] << "] ";
-            index = (index + 1) % capacity;
-        }
-        cout << endl;
-    }
+struct RoundRobin{
+    string PlayerName;
 };
 
-// Function to generate matches for the current rotation
-void generateMatches(CircularQueue& group) {
-    // Assume even number of players
-    int mid = group.getSize() / 2;
-    for (int i = 0; i < mid; i++) {
-        string player1 = group.dequeue();
-        string player2 = group.dequeue();
-        cout << "Match: " << player1 << " vs " << player2 << endl;
-        // Re-enqueue players for the next rotation
-        group.enqueue(player1);
-        group.enqueue(player2);
-    }
-}
+class CircularQueue
+{
+    private:
+        RoundRobin * player;
+        int front;
+        int rear;
+        int size=0;
+        int capacity;
+        bool Empty;
+        public:
+        CircularQueue(int PlayerNum){
+            player=new RoundRobin[PlayerNum];
+            size=0;
+            front=rear=-1;
+            Empty=false;
+            capacity=PlayerNum;
+        }
+ 
+        ~CircularQueue(){
+            cout << "Circular Queue has been deleted" <<endl;
+        }
 
-int main() {
-    // Example: Group of 4 players
-    CircularQueue group(4);
-    group.enqueue("P1");
-    group.enqueue("P2");
-    group.enqueue("P3");
-    group.enqueue("P4");
+        
+        bool isEmpty(){
+            return front==-1;
+        }
 
-    // Simulate Round-Robin rotations
-    int rounds = group.getSize() - 1;
-    for (int i = 0; i < rounds; i++) {
-        cout << "\nRound " << i + 1 << " Matches:" << endl;
-        generateMatches(group);
-        group.rotate();
-    }
+        bool isFull() {
+            return size == capacity;
+        }
 
-    return 0;
-}
+        int PlayerNumber(){
+            return size;
+        }
+
+        void enqueue(string PlName)
+        {
+            if(isFull()){
+                cout << "queue is full" << endl;
+                return;
+            }
+
+            if(isEmpty())front=0;
+            rear=(rear+1) % capacity;
+            player[rear].PlayerName=PlName;
+            size++;
+        }
+
+        string dequeue(){
+            if(isEmpty()){
+                cout << "queue is already empty"<<endl;
+                return "";
+            }
+            string Pl=player[front].PlayerName;
+            if(front==rear)front=rear=-1;
+            else{
+                front=(front+1) % capacity;
+            }
+            size--;
+            return Pl;
+        }
+
+    // Rotate the queue (shift all elements except the first)
+        void rotate() {
+            //exploiting the dynamic nature of circular queues to make the games
+            if (size <= 1) return;
+            
+            string last = player[rear].PlayerName;
+            
+            for(int i=rear; i>front+1 ; i--){
+                player[i].PlayerName=player[i-1].PlayerName;
+            }
+            
+            // Re-add the second player to the second position to achieve accurate rounding
+            player[front+1].PlayerName=last;
+        }
+
+        void RoundRobinMatches(ofstream& file) {
+            int rounds = PlayerNumber();
+            int count = 0;
+        
+            for (int i = 0; i < rounds - 1; i++) { // N-1 rounds for N players
+                int left = front; // Start pointer (front)
+                int right = rear; // End pointer (rear)
+                for (int j = 0; j < rounds / 2; j++) { // Half of the players will be paired
+                    // Dequeue players from both ends
+                    string player1 = player[left].PlayerName;
+                    string player2 = player[right].PlayerName;
+        
+                    // Create a match ID
+                    string matchID = "ROU" + to_string(count)+to_string(j);
+                    file << matchID << ", " << player1 << ", " << player2 << ", Unconfirmed\n";
+                    
+                    // Move pointers inward
+                    left = (left + 1) % capacity;
+                    right = (right - 1 + capacity) %capacity;
+                }
+                count++;
+        
+                rotate();
+            }
+        }
+        
+           
+
+        // Display the current queue
+        void display() {
+            if (isEmpty()) {
+                cout << "Queue is empty!" << endl;
+                return;
+            }
+            int index = front;
+            for (int i = 0; i < size; i++) {
+                cout << player[index].PlayerName << " "<<index << endl;
+                index = (index + 1) % capacity;
+            }
+            cout << endl;
+        }
+    };
+    
+
+
