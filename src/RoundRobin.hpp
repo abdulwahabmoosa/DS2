@@ -37,6 +37,10 @@ class CircularQueue
             return size == capacity;
         }
 
+        int PlayerNumber(){
+            return size;
+        }
+
         void enqueue(string PlName)
         {
             if(isFull()){
@@ -64,54 +68,63 @@ class CircularQueue
             return Pl;
         }
 
-        void rotation(ofstream& file, int round){
-             //example just
-           int count=0;
-           for(int i=0; i<round; i++){
-                string player=dequeue();
-                int iterations=round-1;
-                for(int j=0; j <iterations ; j++){
-                    //size here is the size of the queue that gets decremented after dequeuing
-                    string matchID="ROU"+to_string(count);
-                    string player2=dequeue();
-                    file << matchID << ", " <<player<<", "<< player2 << ", Unconfirmed\n";
-                    enqueue(player2);
-                    count++;
-                } 
-                iterations--;
-            }
+    // Rotate the queue (shift all elements except the first)
+        void rotate() {
             //exploiting the dynamic nature of circular queues to make the games
+            if (size <= 1) return;
+            
+            string last = player[rear].PlayerName;
+            
+            for(int i=rear; i>front+1 ; i--){
+                player[i].PlayerName=player[i-1].PlayerName;
+            }
+            
+            // Re-add the second player to the second position to achieve accurate rounding
+            player[front+1].PlayerName=last;
         }
-};
+
+        void RoundRobinMatches(ofstream& file) {
+            int rounds = PlayerNumber();
+            int count = 0;
+        
+            for (int i = 0; i < rounds - 1; i++) { // N-1 rounds for N players
+                int left = front; // Start pointer (front)
+                int right = rear; // End pointer (rear)
+                for (int j = 0; j < rounds / 2; j++) { // Half of the players will be paired
+                    // Dequeue players from both ends
+                    string player1 = player[left].PlayerName;
+                    string player2 = player[right].PlayerName;
+        
+                    // Create a match ID
+                    string matchID = "ROU" + to_string(count)+to_string(j);
+                    file << matchID << ", " << player1 << ", " << player2 << ", Unconfirmed\n";
+                    
+                    // Move pointers inward
+                    left = (left + 1) % capacity;
+                    right = (right - 1 + capacity) %capacity;
+                }
+                count++;
+        
+                rotate();
+            }
+        }
+        
+           
+
+        // Display the current queue
+        void display() {
+            if (isEmpty()) {
+                cout << "Queue is empty!" << endl;
+                return;
+            }
+            int index = front;
+            for (int i = 0; i < size; i++) {
+                cout << player[index].PlayerName << " "<<index << endl;
+                index = (index + 1) % capacity;
+            }
+            cout << endl;
+        }
+    };
+    
 
 
-
-    // // Rotate the queue (shift all elements except the first)
-    // void rotate() {
-    //     if (size <= 1) return; // No rotation needed for single player
-
-    //     // Store the first player
-    //     string first = dequeue();
-
-    //     // Rotate the remaining players
-    //     enqueue(dequeue());
-
-    //     // Re-add the first player to the front
-    //     front = (front - 1 + capacity) % capacity;
-    //     players[front] = first;
-    //     size++;
-    // }
-
-    // // Display the current queue
-    // void display() {
-    //     if (isEmpty()) {
-    //         cout << "Queue is empty!" << endl;
-    //         return;
-    //     }
-    //     int index = front;
-    //     for (int i = 0; i < size; i++) {
-    //         cout << "[" << players[index] << "] ";
-    //         index = (index + 1) % capacity;
-    //     }
-    //     cout << endl;
-    // }
