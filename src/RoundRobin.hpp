@@ -97,7 +97,7 @@ class CircularQueue
         
                     // Create a match ID
                     string matchID = "ROU" + to_string(count)+to_string(j);
-                    file << matchID << ", " << player1 << ", " << player2 << ", Unconfirmed\n";
+                    file<< matchID << ", " << player1 << ", " << player2 << ", Unconfirmed\n";
                     
                     // Move pointers inward
                     left = (left + 1) % capacity;

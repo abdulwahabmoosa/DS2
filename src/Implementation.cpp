@@ -60,7 +60,7 @@ class PlayersProgression
                 file << MatchID <<", " << player1 << ", " <<player2<<", Unconfirmed\n";
             }
         }
-
+        
         //Round Robin
         //-----------------------------------------------------
         //Helper temporary to assign the players into the stack
@@ -69,10 +69,11 @@ class PlayersProgression
                 roundRobin.enqueue(players[i]);
             }
         }
-
+        
         
         void handleRounds(){
-            roundRobin.handleRound();
+            ofstream file("csv/TennisTournament.csv");
+            roundRobin.handleRound(file);
             // ofstream file("csv/TennisTournament.csv", ios::app);
             // int rounds=roundRobin.PlayerNumber();
             // int count=0;
