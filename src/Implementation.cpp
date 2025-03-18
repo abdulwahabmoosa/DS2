@@ -72,30 +72,8 @@ class PlayersProgression
         
         
         void handleRounds(){
-            ofstream file("csv/TennisTournament.csv");
-            roundRobin.handleRound(file);
-            // ofstream file("csv/TennisTournament.csv", ios::app);
-            // int rounds=roundRobin.PlayerNumber();
-            // int count=0;
-            // roundRobin.rotate();
-            // for(int i=0; i<rounds-1; i++){
-            //     int iterations=(rounds)/2;
-            //     for(int j=0; j <iterations ; j++){
-            //         //size here is the size of the queue that gets decremented after dequeuing
-            //         string player1=roundRobin.dequeue();
-            //         for (int k = 0; k < rounds - 1; k++) {
-            //             roundRobin.enqueue(roundRobin.dequeue());  // Move all players forward
-            //         }
-            //         string player2 = roundRobin.dequeue();
-            //         string matchID="ROU"+to_string(count);
-            //         file << matchID << ", " <<player1<<", "<< player2 << ", Unconfirmed\n";
-            //         count++;
-            //         roundRobin.enqueue(player1);
-            //         roundRobin.enqueue(player2);
-            //     } 
-            //     roundRobin.rotate();
-            //  }
-        
+            ofstream file("csv/TennisTournament.csv", ios::app);
+            roundRobin.RoundRobinMatches(file);        
         }
         
 };

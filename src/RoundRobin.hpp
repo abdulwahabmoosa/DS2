@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <fstream>
 using namespace std;
 
 struct RoundRobin{
@@ -83,6 +84,7 @@ class CircularQueue
             player[front+1].PlayerName=last;
         }
 
+
         void RoundRobinMatches(ofstream& file) {
             int rounds = PlayerNumber();
             int count = 0;
@@ -90,15 +92,23 @@ class CircularQueue
             for (int i = 0; i < rounds - 1; i++) { // N-1 rounds for N players
                 int left = front; // Start pointer (front)
                 int right = rear; // End pointer (rear)
-                for (int j = 0; j < rounds / 2; j++) { // Half of the players will be paired
+                for (int j = 0; j < rounds / 2; j++) { 
+
+                    if (left < 0 || right < 0 || left >= capacity || right >= capacity) {
+                        cerr << "Error: Invalid player index!" << endl;
+                        continue;
+                    }
                     // Dequeue players from both ends
                     string player1 = player[left].PlayerName;
                     string player2 = player[right].PlayerName;
-        
-                    // Create a match ID
-                    string matchID = "ROU" + to_string(count)+to_string(j);
-                    file<< matchID << ", " << player1 << ", " << player2 << ", Unconfirmed\n";
                     
+                    if (player1.empty() || player2.empty()) {
+                        cerr << "Error: Empty player name detected!" << endl;
+                        continue;
+                    }        
+                    // Create a match ID
+                    string matchID = "ROU" + to_string(count+1)+to_string(j+1);
+                    file << matchID << ", " << player1 << ", " << player2 << ", Unconfirmed\n";
                     // Move pointers inward
                     left = (left + 1) % capacity;
                     right = (right - 1 + capacity) %capacity;
@@ -108,9 +118,8 @@ class CircularQueue
                 rotate();
             }
         }
-        
-           
 
+        
         // Display the current queue
         void display() {
             if (isEmpty()) {
