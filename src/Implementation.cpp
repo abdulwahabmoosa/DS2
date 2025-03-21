@@ -259,6 +259,6 @@ int main(){
     // Pl.HandleQualifiers();
     // Pl.assignPlayersRounds();
     // Pl.handleRounds();
-
+ 
 }
   
