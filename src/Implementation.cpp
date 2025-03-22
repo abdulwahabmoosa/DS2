@@ -95,12 +95,11 @@ class PlayersProgression
         
         void HandleKnockOuts(){
             int iterations=(Kstack.capacity()/2);
-            ofstream file("csv/TennisTournament.csv");
+            ofstream file("csv/TennisTournament.csv", ios::app);
             if(!file){
                 cout << "file not there";
             } 
             string MatchID;
-            file << "Match ID, Player 1, Player 2, Match Status\n";
             cout << "Semi Final"<<endl;
             cout << string(80,'=') <<left<<endl;
             for (int i=0; i<iterations;i++){
@@ -123,12 +122,11 @@ class PlayersProgression
         }
 
         void HandleFinal(){
-            ofstream file("csv/TennisTournament.csv");
+            ofstream file("csv/TennisTournament.csv", ios::app);
             if(!file){
                 cout << "file not there";
             } 
             string MatchID;
-            file << "Match ID, Player 1, Player 2, Match Status\n";
             string player1=Kstack.pop();
             string player2=Kstack.pop();
             MatchID="FINAL";
@@ -168,7 +166,7 @@ class PlayersProgression
                 cout << " 6. return to the actual Menu." << endl;
                 cout << string(80, '=') << left<< endl;
                 cout << "Chioce: ";
-                while(!(cin >> choice) || !(Checking(choice, 1, 5))){
+                while(!(cin >> choice) || !(Checking(choice, 1, 6))){
                     cout << "Invalid Input please your choice again correctly: ";
                     cin.clear();
                     cin.ignore(numeric_limits <streamsize> ::max(),'\n');
@@ -242,7 +240,6 @@ class PlayersProgression
                         case 5: 
                             clearScreen();
                             continue;
-
                         default:
                             cout << "Indefined action "<<endl;
                             break;

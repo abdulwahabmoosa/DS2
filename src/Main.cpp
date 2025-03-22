@@ -2,7 +2,7 @@
 // #include "TournamentScheduler.h"  // Header file for tournament scheduling
 // #include "TicketManager.h"        // Header file for ticket sales and spectator management
 // #include "PlayerWithdrawals.h"    // Header file for handling player withdrawals
-// #include "MatchHistory.h"         // Header file for match history tracking
+#include "MatchHistory.hpp"         // Header file for match history tracking
 
 using namespace std;
 
@@ -19,6 +19,7 @@ void displayMenu() {
 }
 
 int main() {
+    MatchHistory match;
     int choice;
     // TournamentScheduler scheduler;
     // TicketManager ticketManager;
@@ -42,7 +43,7 @@ int main() {
                 // Kashave
                 break;
             case 4:
-                // Abdulwahab work
+                match.Menu();
                 break;
             case 5:
                 cout << "Exiting the system. Goodbye!" << endl;
