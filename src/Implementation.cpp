@@ -95,12 +95,11 @@ class PlayersProgression
         
         void HandleKnockOuts(){
             int iterations=(Kstack.capacity()/2);
-            ofstream file("csv/TennisTournament.csv");
+            ofstream file("csv/TennisTournament.csv", ios::app);
             if(!file){
                 cout << "file not there";
             } 
             string MatchID;
-            file << "Match ID, Player 1, Player 2, Match Status\n";
             cout << "Semi Final"<<endl;
             cout << string(80,'=') <<left<<endl;
             for (int i=0; i<iterations;i++){
@@ -123,12 +122,11 @@ class PlayersProgression
         }
 
         void HandleFinal(){
-            ofstream file("csv/TennisTournament.csv");
+            ofstream file("csv/TennisTournament.csv", ios::app);
             if(!file){
                 cout << "file not there";
             } 
             string MatchID;
-            file << "Match ID, Player 1, Player 2, Match Status\n";
             string player1=Kstack.pop();
             string player2=Kstack.pop();
             MatchID="FINAL";
@@ -137,7 +135,6 @@ class PlayersProgression
             cout<<player1 << " VS " <<player2 <<endl;
             file << MatchID <<", " << player1 << ", " <<player2<<", Unconfirmed\n";
         }
-        
         
         //Player Tracking
         
