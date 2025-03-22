@@ -2,6 +2,7 @@
 #include <limits>
 #include "MatchHistory.hpp"              // Header file for match history tracking
 #include "PlayerProgression.hpp"         // Header file for player progression
+#include "HandleWithdraw.hpp"
 
 using namespace std;
 
@@ -16,6 +17,7 @@ void clearScreen() {
 int main() {
     MatchHistory match;
     PlayersProgression player;
+    HandleWithdraw withdraw;
     int choice;
     
     // Do your code in separate files including your menu and only call your main in the below code
@@ -46,6 +48,7 @@ int main() {
                 break;
             case 3:
                 // Kashave
+                withdraw.Menu();
                 break;
             case 4:
                 //Abdulwahab
