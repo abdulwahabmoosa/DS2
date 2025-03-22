@@ -1160,6 +1160,7 @@ void displayHistoricalLogs() {
         int choice;
         
         do {
+            changeGameStatus();
             cout << string(80, '=') << left << endl;
             cout << "SET MATCH SCORES" << endl;
             cout << string(80, '=') << left << endl;

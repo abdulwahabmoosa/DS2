@@ -51,14 +51,6 @@ class Knockouts_Stack
                 return player;
             }
         }
-
-        void displayStack(){
-            WinningPlayers * temp=head;
-            while(temp!=nullptr){
-                cout << temp ->playerName << endl;
-                temp=temp -> next;
-            }
-        }
         
         string top(){
             if(head==nullptr)return "Stack is empty";

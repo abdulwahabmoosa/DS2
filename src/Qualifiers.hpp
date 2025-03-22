@@ -1,5 +1,5 @@
-#ifndef Qualifiers_HPP
-#define Qualifiers_HPP
+#ifndef QUALIFIERS_HPP
+#define QUALIFIERS_HPP
 #include <iostream>
 #include <string>
 #include <fstream>

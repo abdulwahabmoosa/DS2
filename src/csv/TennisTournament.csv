@@ -1,40 +1,9 @@
-Match ID, Player 1, Player 2, Match Status, Score 1, Score 2, Winner
-QUL_1, Roger Federer, Rafael Nadal,  Confirmed, 1, 3, Rafael Nadal
-QUL_2, Novak Djokovic, Pete Sampras,  Confirmed, 2, 0, Novak Djokovic
-QUL_3, Bjorn Borg, Rod Laver,  Confirmed, 1, 0, Bjorn Borg
-QUL_4, Andre Agassi, Jimmy Connors,  Confirmed, 2, 0, Andre Agassi
-QUL_5, John McEnroe, Ivan Lendl,  Confirmed, 1, 3, Ivan Lendl
-QUL_6, Stefan Edberg, Boris Becker,  Confirmed, 1, 3, Boris Becker
-QUL_7, Andy Murray, Stan Wawrinka,  Confirmed, 3, 2, Andy Murray
-QUL_8, Goran Ivanisevic, Mats Wilander,  Confirmed, 3, 0, Goran Ivanisevic
-ROU11, Roger Federer, Jimmy Connors, Confirmed, 3, 0, Roger Federer
-ROU12, Rafael Nadal, Andre Agassi, Confirmed, 2, 1, Rafael Nadal
-ROU13, Novak Djokovic, Rod Laver, Confirmed, 0, 2, Rod Laver
-ROU14, Pete Sampras, Bjorn Borg, Confirmed, 1, 0, Pete Sampras
-ROU21, Roger Federer, Andre Agassi, Confirmed, 2, 3, Andre Agassi
-ROU22, Jimmy Connors, Rod Laver, Confirmed, 3, 2, Jimmy Connors
-ROU23, Rafael Nadal, Bjorn Borg, Confirmed, 3, 2, Rafael Nadal
-ROU24, Novak Djokovic, Pete Sampras, Confirmed, 1, 0, Novak Djokovic
-ROU31, Roger Federer, Rod Laver, Confirmed, 3, 2, Roger Federer
-ROU32, Andre Agassi, Bjorn Borg, Confirmed, 2, 1, Andre Agassi
-ROU33, Jimmy Connors, Pete Sampras, Confirmed, 1, 0, Jimmy Connors
-ROU34, Rafael Nadal, Novak Djokovic, Confirmed, 1, 3, Novak Djokovic
-ROU41, Roger Federer, Bjorn Borg, Confirmed, 1, 0, Roger Federer
-ROU42, Rod Laver, Pete Sampras, Confirmed, 3, 0, Rod Laver
-ROU43, Andre Agassi, Novak Djokovic, Confirmed, 2, 1, Andre Agassi
-ROU44, Jimmy Connors, Rafael Nadal, Confirmed, 1, 3, Rafael Nadal
-ROU51, Roger Federer, Pete Sampras, Confirmed, 3, 1, Roger Federer
-ROU52, Bjorn Borg, Novak Djokovic, Confirmed, 1, 2, Novak Djokovic
-ROU53, Rod Laver, Rafael Nadal, Confirmed, 0, 3, Rafael Nadal
-ROU54, Andre Agassi, Jimmy Connors, Confirmed, 0, 2, Jimmy Connors
-ROU61, Roger Federer, Novak Djokovic, Confirmed, 0, 2, Novak Djokovic
-ROU62, Pete Sampras, Rafael Nadal, Confirmed, 2, 1, Pete Sampras
-ROU63, Bjorn Borg, Jimmy Connors, Confirmed, 2, 1, Bjorn Borg
-ROU64, Rod Laver, Andre Agassi, Confirmed, 2, 1, Rod Laver
-ROU71, Roger Federer, Rafael Nadal, Confirmed, 1, 0, Roger Federer
-ROU72, Novak Djokovic, Jimmy Connors, Confirmed, 1, 3, Jimmy Connors
-ROU73, Pete Sampras, Andre Agassi, Confirmed, 0, 2, Andre Agassi
-ROU74, Bjorn Borg, Rod Laver, Confirmed, 2, 0, Bjorn Borg
-Semi_1, Pete Sampras, Novak Djokovic, Confirmed, 2, 4, Novak Djokovic
-Semi_2,  Rafael Nadal,  Roger Federer,  Confirmed, 8, 6, Rafael Nadal
-FINAL,  Rafael Nadal,  Roger Federer,  Confirmed, 3, 6, Roger Federer
+Match ID, Player 1, Player 2, Match Status
+QUL_1, Roger Federer, Rafael Nadal, Unconfirmed
+QUL_2, Novak Djokovic, Pete Sampras, Unconfirmed
+QUL_3, Bjorn Borg, Rod Laver, Unconfirmed
+QUL_4, Andre Agassi, Jimmy Connors, Unconfirmed
+QUL_5, John McEnroe, Ivan Lendl, Unconfirmed
+QUL_6, Stefan Edberg, Boris Becker, Unconfirmed
+QUL_7, Andy Murray, Stan Wawrinka, Unconfirmed
+QUL_8, Goran Ivanisevic, Mats Wilander, Unconfirmed
