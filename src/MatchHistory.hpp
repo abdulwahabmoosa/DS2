@@ -21,7 +21,9 @@ private:
     HistoryQueue historyQueue;
     
 public:
-    MatchHistory() {}
+    MatchHistory() {
+        srand(time(nullptr));
+    }
     ~MatchHistory() {}
     
     // Helper functions
@@ -187,6 +189,75 @@ bool allRoundRobinScored() {
     return roundRobinExists && allScored;
 }
 
+// Function to record or update loser information to a CSV file
+void recordLoserInfo(string playerName, int roundsWon, string matchID) {
+    // Check if file exists
+    ifstream checkFile("csv/losers.csv");
+    bool fileExists = checkFile.good();
+    
+    if (!fileExists) {
+        // File doesn't exist, create and add header
+        ofstream newFile("csv/losers.csv");
+        if (newFile.is_open()) {
+            newFile << "Player Name,Rounds Won,Match ID" << endl;
+            newFile << playerName << "," << roundsWon << "," << matchID << endl;
+            newFile.close();
+            return;
+        }
+    } else {
+        // File exists, read all lines into an array
+        const int MAX_LINES = 100; // Adjust as needed
+        string lines[MAX_LINES];
+        int lineCount = 0;
+        
+        // Read header
+        string header;
+        getline(checkFile, header);
+        lines[lineCount++] = header;
+        
+        // Read all data lines
+        string line;
+        bool matchFound = false;
+        
+        while (getline(checkFile, line) && lineCount < MAX_LINES) {
+            stringstream ss(line);
+            string name, rounds, id;
+            
+            getline(ss, name, ',');
+            getline(ss, rounds, ',');
+            getline(ss, id);
+            
+            // Check if this is the match we're updating
+            if (id == matchID) {
+                // Replace with new loser information
+                lines[lineCount++] = playerName + "," + to_string(roundsWon) + "," + matchID;
+                matchFound = true;
+            } else {
+                // Keep this line as is
+                lines[lineCount++] = line;
+            }
+        }
+        
+        checkFile.close();
+        
+        // If match not found, add new entry
+        if (!matchFound && lineCount < MAX_LINES) {
+            lines[lineCount++] = playerName + "," + to_string(roundsWon) + "," + matchID;
+        }
+        
+        // Write all lines back to file
+        ofstream loserFile("csv/losers.csv");
+        if (loserFile.is_open()) {
+            for (int i = 0; i < lineCount; i++) {
+                loserFile << lines[i] << endl;
+            }
+            loserFile.close();
+        } else {
+            cout << "Error: Could not open losers.csv file for writing." << endl;
+        }
+    }
+}
+
     // Score recording functions
     //----------------------------------
     // Modified function to set random scores for qualifier matches
@@ -301,9 +372,15 @@ void setQualifiersScores() {
                 winner = player2;
             }
             
+
+
             cout << "Generated Scores: " << player1 << " " << score1 << " - " << score2 << " " << player2 << endl;
             cout << "Winner: " << winner << endl;
             
+            string loser = (winner == player1) ? player2 : player1;
+            int loserScore = (winner == player1) ? score2 : score1;
+            recordLoserInfo(loser, loserScore, matchID);
+
             // Update the line with scores
             lines[i] = matchID + ", " + player1 + ", " + player2 + ", " + status + ", " + 
                       to_string(score1) + ", " + to_string(score2) + ", " + winner;
@@ -575,6 +652,10 @@ void setRoundRobinScores() {
             } else {
                 winner = player2;
             }
+
+            string loser = (winner == player1) ? player2 : player1;
+            int loserScore = (winner == player1) ? score2 : score1;
+            recordLoserInfo(loser, loserScore, matchID);
             
             cout << "Generated Scores: " << player1 << " " << score1 << " - " << score2 << " " << player2 << endl;
             cout << "Winner: " << winner << endl;
@@ -788,6 +869,11 @@ void setRoundRobinScores() {
                 } else {
                     winner = "Tie";
                 }
+
+                // After determining the winner
+                string loser = (winner == player1) ? player2 : player1;
+                int loserScore = (winner == player1) ? score2 : score1;
+                recordLoserInfo(loser, loserScore, matchID);
                 
                 cout << "Winner: " << winner << endl;
                 
@@ -912,6 +998,12 @@ void setRoundRobinScores() {
             cout << "\nMatch scores updated successfully!" << endl;
             cout << "New Score: " << recentMatch->score1 << " - " << recentMatch->score2 << endl;
             cout << "New Winner: " << recentMatch->winner << endl;
+            
+            string loser = (newWinner == recentMatch->player1) ? recentMatch->player2 : recentMatch->player1;
+            int loserScore = (newWinner == recentMatch->player1) ? newScore2 : newScore1;
+            recordLoserInfo(loser, loserScore, recentMatch->matchID);
+
+
         } else {
             cout << "\nFailed to update match in CSV file. No changes were made." << endl;
         }
