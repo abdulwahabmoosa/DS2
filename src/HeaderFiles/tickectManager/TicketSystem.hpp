@@ -96,11 +96,6 @@
      //Add a new customer
      string addCustomer(const string& name, const string& email, 
                             const string& phone, int priority);
-     /*// Add a new match
-     string addMatch(const string& player1, const string& player2,
-                         const string& date, const string& time,
-                         const string& court, int capacity);*/
-     
      // Request a ticket for a match
      bool requestTicket(const string& customerID, const string& matchID);
      

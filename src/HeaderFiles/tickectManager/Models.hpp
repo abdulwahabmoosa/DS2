@@ -34,43 +34,16 @@
          : customerID(id), name(n), email(e), phone(p), priorityLevel(priority) {}
  };
  
- /*
- struct Match {
-     string matchID;       
-     string player1;       
-     string player2;       
-     string date;          
-     string time;          
-     string court;//venue
-     string status;//SCHEDULED,IN_PROGRESS,COMPLETED, CANCELLED
-     string score; //Current or final score
-     string winner;    
-     int totalSeats;            
-     int availableSeats; 
-     
-     //Default constructor
-     Match() : matchID(""), player1(""), player2(""), date(""), time(""), 
-               court(""), status("SCHEDULED"), score(""), winner(""),
-               totalSeats(100), availableSeats(100) {}
-     
-     //Parameterized constructor
-     Match(string id, string p1, string p2, string d, 
-           string t, string c, string s, int seats) 
-         : matchID(id), player1(p1), player2(p2), date(d), time(t), court(c), 
-           status(s), score(""), winner(""), totalSeats(seats), availableSeats(seats) {}
- };
- */
-
   struct Match {
-      string matchID;       // Match identifier (e.g., QUI_1)
-      string player1;       // First player's name
-      string player2;       // Second player's name
-      string status;        // Match status (Confirmed, etc.)
-      int score1;                // Score for player 1
-      int score2;                // Score for player 2
-      string winner;        // Winner of the match
-      int totalSeats;            // Total venue capacity
-      int availableSeats;        // Remaining available seats
+      string matchID;       
+      string player1;       
+      string player2;       
+      string status;        
+      int score1;                
+      int score2;                
+      string winner;        
+      int totalSeats;            
+      int availableSeats;        
       
       // Default constructor
       Match() : matchID(""), player1(""), player2(""), status(""), 
