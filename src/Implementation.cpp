@@ -165,7 +165,7 @@ class PlayersProgression
                 cout << " 6. return to the actual Menu." << endl;
                 cout << string(80, '=') << left<< endl;
                 cout << "Chioce: ";
-                while(!(cin >> choice) || !(Checking(choice, 1, 5))){
+                while(!(cin >> choice) || !(Checking(choice, 1, 6))){
                     cout << "Invalid Input please your choice again correctly: ";
                     cin.clear();
                     cin.ignore(numeric_limits <streamsize> ::max(),'\n');
@@ -239,7 +239,6 @@ class PlayersProgression
                         case 5: 
                             clearScreen();
                             continue;
-
                         default:
                             cout << "Indefined action "<<endl;
                             break;
