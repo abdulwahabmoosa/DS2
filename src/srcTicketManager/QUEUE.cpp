@@ -112,7 +112,7 @@ EntryRecord Queue::dequeue() {
      // Print header
      cout << "\n----- Gate " << gateNumber << " Entry Queue -----" <<endl;
      cout << "Total spectators in line: " << size << " (Max: " << maxSize << ")" <<endl;
-     cout << std::setw(5) << "Pos" << " | " 
+     cout << setw(5) << "Pos" << " | " 
                <<setw(15) << "Customer ID" << " | " 
                <<setw(15) << "Ticket ID" <<endl;
             cout <<string(45, '-') <<endl;

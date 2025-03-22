@@ -285,181 +285,56 @@
      }
  }
  
- //admin functions
- /*void handleAdminFunctions(TicketSystem& system) {
-     int choice = 0;
-     
-     while (choice != 4) {
-         clearScreen();
-         cout << "============= ADMIN FUNCTIONS =============" << endl;
-         cout << "Current Sales Phase: ";
-         switch (system.getSalesPhase()) {
-             case 3:
-                 cout << "VIP Only";
-                 break;
-             case 2:
-                 cout << "Early-Bird";
-                 break;
-             case 1:
-                 cout << "General Public";
-                 break;
-         }
-         cout << endl;
-         
-         cout << "\n1. Change Sales Phase" << endl;
-         cout << "2. Add New Customer" << endl;
-         cout << "3. Add New Match" << endl;
-         cout << "4. Return to Main Menu" << endl;
-         
-         cout << "\nEnter your choice: ";
-         cin >> choice;
-         
-         // Clear input buffer
-         cin.clear();
-         cin.ignore(numeric_limits<streamsize>::max(), '\n');
-         
-         switch (choice) {
-             case 1:
-                 // Change sales phase
-                 cout << "\n1. VIP Only Phase" << endl;
-                 cout << "2. Early-Bird Phase" << endl;
-                 cout << "3. General Public Phase" << endl;
-                 cout << "Enter new phase: ";
-                 
-                 int phase;
-                 cin >> phase;
-                 cin.clear();
-                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                 
-                 if (phase >= 1 && phase <= 3) {
-                     system.setSalesPhase(4 - phase);//Convert UI values to internal values
-                     cout << "Sales phase updated." << endl;
-                 } else {
-                     cout << "Invalid phase." << endl;
-                 }
-                 pauseScreen();
-                 break;
-             
-             case 2:
-                 //Add new customer
-                 {
-                     string name, email, phone;
-                     int priority;
-                     
-                     cout << "\nEnter customer name: ";
-                     getline(cin, name);
-                     
-                     cout << "Enter customer email: ";
-                     getline(cin, email);
-                     
-                     cout << "Enter customer phone: ";
-                     getline(cin, phone);
-                     
-                     cout << "Enter customer priority (3=VIP, 2=Early-Bird, 1=General): ";
-                     cin >> priority;
-                     cin.clear();
-                     cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                     
-                     string customerID = system.addCustomer(name, email, phone, priority);
-                     cout << "New customer added with ID: " << customerID << endl;
-                 }
-                 pauseScreen();
-                 break;
-             
-             case 3:
-                 //Add new match
-                 {
-                     string player1, player2, date, time, court;
-                     int capacity;
-                     
-                     cout << "\nEnter player 1: ";
-                     getline(cin, player1);
-                     
-                     cout << "Enter player 2: ";
-                     getline(cin, player2);
-                     
-                     cout << "Enter date (YYYY-MM-DD): ";
-                     getline(cin, date);
-                     
-                     cout << "Enter time (HH:MM): ";
-                     getline(cin, time);
-                     
-                     cout << "Enter court: ";
-                     getline(cin, court);
-                     
-                     cout << "Enter capacity: ";
-                     cin >> capacity;
-                     cin.clear();
-                     cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                     
-                     string matchID = system.addMatch(player1, player2, date, time, court, capacity);
-                     cout << "New match added with ID: " << matchID << endl;
-                 }
-                 pauseScreen();
-                 break;
-             
-             case 4:
-                 // Return to main menu
-                 break;
-             
-             default:
-                 cout << "Invalid choice. Please try again." << endl;
-                 pauseScreen();
-         }
-     }
- }
- */
-
 
  void handleAdminFunctions(TicketSystem& system) {
     int choice = 0;
     
     while (choice != 3) {  // Changed from 4 to 3 since we removed addMatch
         clearScreen();
-        std::cout << "============= ADMIN FUNCTIONS =============" << std::endl;
-        std::cout << "Current Sales Phase: ";
+        cout << "============= ADMIN FUNCTIONS =============" << endl;
+        cout << "Current Sales Phase: ";
         switch (system.getSalesPhase()) {
             case 3:
-                std::cout << "VIP Only";
+                cout << "VIP Only";
                 break;
             case 2:
-                std::cout << "Early-Bird";
+                cout << "Early-Bird";
                 break;
             case 1:
-                std::cout << "General Public";
+                cout << "General Public";
                 break;
         }
-        std::cout << std::endl;
+        cout << endl;
         
-        std::cout << "\n1. Change Sales Phase" << std::endl;
-        std::cout << "2. Add New Customer" << std::endl;
-        std::cout << "3. Return to Main Menu" << std::endl;  // Changed from 4 to 3
+        cout << "\n1. Change Sales Phase" << endl;
+        cout << "2. Add New Customer" << endl;
+        cout << "3. Return to Main Menu" << endl;  // Changed from 4 to 3
         
-        std::cout << "\nEnter your choice: ";
-        std::cin >> choice;
+        cout << "\nEnter your choice: ";
+        cin >> choice;
         
         // Clear input buffer
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         
         switch (choice) {
             case 1:
                 // Change sales phase
-                std::cout << "\n1. VIP Only Phase" << std::endl;
-                std::cout << "2. Early-Bird Phase" << std::endl;
-                std::cout << "3. General Public Phase" << std::endl;
-                std::cout << "Enter new phase: ";
+                cout << "\n1. VIP Only Phase" << endl;
+                cout << "2. Early-Bird Phase" << endl;
+                cout << "3. General Public Phase" << endl;
+                cout << "Enter new phase: ";
                 
                 int phase;
-                std::cin >> phase;
-                std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                cin >> phase;
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 
                 if (phase >= 1 && phase <= 3) {
                     system.setSalesPhase(4 - phase); // Convert UI values to internal values
-                    std::cout << "Sales phase updated." << std::endl;
+                    cout << "Sales phase updated." << endl;
                 } else {
-                    std::cout << "Invalid phase." << std::endl;
+                    cout << "Invalid phase." << endl;
                 }
                 pauseScreen();
                 break;
@@ -467,25 +342,25 @@
             case 2:
                 // Add new customer
                 {
-                    std::string name, email, phone;
+                    string name, email, phone;
                     int priority;
                     
-                    std::cout << "\nEnter customer name: ";
-                    std::getline(std::cin, name);
+                    cout << "\nEnter customer name: ";
+                    getline(cin, name);
                     
-                    std::cout << "Enter customer email: ";
-                    std::getline(std::cin, email);
+                    cout << "Enter customer email: ";
+                    getline(cin, email);
                     
-                    std::cout << "Enter customer phone: ";
-                    std::getline(std::cin, phone);
+                    cout << "Enter customer phone: ";
+                    getline(cin, phone);
                     
-                    std::cout << "Enter customer priority (3=VIP, 2=Early-Bird, 1=General): ";
-                    std::cin >> priority;
-                    std::cin.clear();
-                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    cout << "Enter customer priority (3=VIP, 2=Early-Bird, 1=General): ";
+                    cin >> priority;
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
                     
-                    std::string customerID = system.addCustomer(name, email, phone, priority);
-                    std::cout << "New customer added with ID: " << customerID << std::endl;
+                    string customerID = system.addCustomer(name, email, phone, priority);
+                    cout << "New customer added with ID: " << customerID << endl;
                 }
                 pauseScreen();
                 break;
@@ -495,7 +370,7 @@
                 break;
             
             default:
-                std::cout << "Invalid choice. Please try again." << std::endl;
+                cout << "Invalid choice. Please try again." << endl;
                 pauseScreen();
         }
     }
