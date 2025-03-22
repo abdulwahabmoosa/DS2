@@ -3,6 +3,8 @@
 #include "MatchHistory.hpp"              // Header file for match history tracking
 #include "PlayerProgression.hpp"         // Header file for player progression
 #include "HandleWithdraw.hpp"
+#include "HandleDeposit.hpp"
+#include "HeaderFiles/tickectManager/TicketManagement.hpp" 
 
 using namespace std;
 
@@ -18,6 +20,7 @@ int main() {
     MatchHistory match;
     PlayersProgression player;
     HandleWithdraw withdraw;
+    TicketManagement ticketManager;
     int choice;
     
     // Do your code in separate files including your menu and only call your main in the below code
@@ -45,6 +48,7 @@ int main() {
                 break;
             case 2:
                 // Akira
+                ticketManager.Menu();
                 break;
             case 3:
                 // Kashave
