@@ -47,6 +47,7 @@ class Knockouts_Stack
             else{
                 string player= temp -> playerName;
                 head=head ->next;
+                size--;
                 delete temp;
                 return player;
             }

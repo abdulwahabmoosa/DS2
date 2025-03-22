@@ -12,6 +12,10 @@ class PlayersProgression
 {   
     private:
         string* players;
+        bool Qdrawn=false;
+        bool Rdrawn=false;
+        bool Kdrawn=false;
+        bool Kfinal=false;
         int playersNum; 
     public:
         Knockouts_Stack Kstack;
@@ -81,7 +85,7 @@ class PlayersProgression
         }
 
         //Semi Final Flag
-        bool ScoreUpdatedSemi(){
+        bool ScoreUpdatedKnockouts(string match, int length){
             ifstream file("csv/TennisTournament.csv");
     
             if(!file){
@@ -90,39 +94,31 @@ class PlayersProgression
             }
             string line;
             getline(file, line);
-            istringstream ss(line);
-            string field;
             int counts=0;
-            while(getline(ss, field, ',')){
-                string matchID;
-                getline(ss, matchID, ',');
-                if(matchID.find("ROU_")==0){
+            while(getline(file, line)){
+                istringstream ss(line);
+                string matchID, p1, p2, status, s1, s2, winner;
+
+                // Read all fields (expecting 7 columns)
+                if (!(getline(ss, matchID, ',') &&
+                      getline(ss, p1, ',') &&
+                      getline(ss, p2, ',') &&
+                      getline(ss, status, ',') &&
+                      getline(ss, s1, ',') &&
+                      getline(ss, s2, ',') &&
+                      getline(ss, winner))) {
+                    continue; // Skip malformed lines
+                }
+        
+                // Trim winner field
+                winner = winner.substr(winner.find_first_not_of(' '));
+        
+                // Count only if matchID is ROU and winner is not empty
+                if (matchID.find(match) == 0 && !winner.empty()) {
                     counts++;
                 }
             }
-            return counts==28;
-        }
-        //Semi Final Flag
-        bool ScoreUpdatedFinal(){
-            ifstream file("csv/TennisTournament.csv");
-    
-            if(!file){
-                cout  << "File cannot be openend";
-                return false;
-            }
-            string line;
-            getline(file, line);
-            istringstream ss(line);
-            string field;
-            int counts=0;
-            while(getline(ss, field, ',')){
-                string matchID;
-                getline(ss, matchID, ',');
-                if(matchID.find("Semi_")==0){
-                    counts++;
-                }
-            }
-            return counts==2;
+            return counts==length;
         }
 
         //Round Robin
@@ -245,7 +241,6 @@ class PlayersProgression
             //Now copy the element back to stack
             for(int i=0; i<4; i++){
                 Kstack.push(playerArray[i]);
-                cout << playerArray[i] << " " << wins[i] << endl;
             }
 
         }
@@ -353,33 +348,32 @@ class PlayersProgression
                 winner  = (winner.find_first_not_of(' ')  != string::npos) ? winner.substr(winner.find_first_not_of(' '))  : "";
                 
 
-                if(matchID.find("QUL_")==0 && (player1==PlayerName) || (player2==PlayerName)){
-                    cout << "Qualification Stage.."<<endl;
+                if(matchID.find("QUL_")==0 && (player1==PlayerName || player2==PlayerName)){
+                    cout << "Qualification Stage:"<<endl;
                     cout << "Qualifiers Oponent: " << ((player1==PlayerName)?player2:player1) << endl;
                     cout << "Score: " << sc1 << " - "<<sc2 << endl;
                     cout << "Result: " << ((winner==PlayerName)? "Win":"Loss") <<endl;
                     cout <<string(80, '-') <<left<<endl;
                     IsQuali=true;
                 }
-                else if(matchID.find("ROU_")==0 && (player1==PlayerName) || (player2==PlayerName)){
+                else if(matchID.find("ROU")==0 && (player1==PlayerName || player2==PlayerName)){
                     if(winner==PlayerName){
                         RoundRobinW++;
                     }
                     IsRounded=true;
                 }
-                
-                else if(matchID.find("Semi_")==0 && (player1==PlayerName) || (player2==PlayerName)){
-                    cout << "Semi Final"<<endl;
+                else if(matchID.find("Semi_")==0 && (player1==PlayerName || player2==PlayerName)){
+                    cout << "Semi Final Stage: "<<endl;
                     cout << "Semi Final Oponent: " << ((player1==PlayerName)?player2:player1) << endl;
                     cout << "Score: " << sc1 << " - "<<sc2 << endl;
                     cout << "Result: " << ((winner==PlayerName)? "Win":"Loss") << endl;
                     cout <<string(80, '-') <<left<<endl;
                     ReachedSemi=true;
                 }
-                else if(matchID.find("FINAL")==0 && (player1==PlayerName) || (player2==PlayerName)){
-                    cout << "Final"<<endl;
+                else if(matchID.find("FINAL")==0 && (player1==PlayerName || player2==PlayerName)){
+                    cout << "Final Stage: "<<endl;
                     ReachedFinal=true;
-                    cout << "Qualifiers Oponent: " << ((player1==PlayerName)?player2:player1) << endl;
+                    cout << "Final Oponent: " << ((player1==PlayerName)?player2:player1) << endl;
                     cout << "Score: " << sc1 << " - "<<sc2 << endl;
                     cout << "Result: " << ((winner==PlayerName)? "Win":"Loss") << endl;
                     cout <<string(80, '-') <<left<<endl;
@@ -401,8 +395,6 @@ class PlayersProgression
         
         //Knockouts Menu
         void knockoutsMenu(){
-            bool Kdrawn=false;
-            bool Kfinal=false;
             int choice;
             do{
                 cout << "1. Semi Final. "<<endl;
@@ -418,14 +410,14 @@ class PlayersProgression
                 switch (choice)
                 {
                 case 1:
-                    if(!ScoreUpdatedSemi()){
+                    if(!ScoreUpdatedKnockouts("ROU", 28)){
                         cout << "The match hasn't started yet.. wait for the score to be revealed"<<endl;
                         continue;
-                    }else{
+                    }else if (ScoreUpdatedKnockouts("ROU", 28) && !Kdrawn){
                         Semi_Final();
                         SelectTopFour();
                     }
-                    if(Kdrawn){
+                    else if(Kdrawn){
                         cout << " The Action has already been executed"<<endl;
                         continue;
                     }
@@ -434,38 +426,35 @@ class PlayersProgression
                         "Please come back later after the completion of Round Robin games" << endl;
                         continue;
                     }
-                    else{
-                        HandleKnockOuts();
-                        Kdrawn=true;
+                    HandleKnockOuts();
+                    Kdrawn=true;
+                    break;
+                case 2:
+                    if(!ScoreUpdatedKnockouts("Semi_", 2)){
+                        cout << "The match hasn't started yet.. wait for the score to be revealed"<<endl;
+                        continue;
+                    }else if (ScoreUpdatedKnockouts("Semi_", 2) && !Kfinal){
+                        Final();
+                    }
+                    else if(Kfinal){
+                        cout << " The Action has already been executed"<<endl;
                         continue;
                     }
-
-                    case 2:
-                        if(!ScoreUpdatedFinal()){
-                            cout << "The match hasn't started yet.. wait for the score to be revealed"<<endl;
-                            continue;
-                        }else{
-                            Final();
-                        }
-                        if(Kfinal){
-                            cout << " The Action has already been executed"<<endl;
-                            continue;
-                        }
-                        else if(Kstack.isEmpty()){
-                            cout << "Semi Final matches hasn't been played or drew"<<endl <<
-                            "Please come back later after the completion of Semi Final games" << endl;
-                            continue;
-                        }
-                        else{
-                            HandleFinal();
-                            Kfinal=true;
-                            continue;
-                        }
-                    case 3: 
+                    else if(Kstack.isEmpty()){
+                        cout << "Semi Final matches hasn't been played or drew"<<endl <<
+                        "Please come back later after the completion of Semi Final games" << endl;
                         continue;
-                    default:
+                    }
+                    HandleFinal();
+                    Kfinal=true;
+                    break;
+
+                case 3: 
+                    break;  
+
+                default:
                     cout << "Incorrect input" <<endl;
-                    continue;;
+                    break;
                 }
             }while(choice!=3);
         }
@@ -482,8 +471,6 @@ class PlayersProgression
         void Menu(){
             assignPlayersQualifiers();
             int choice;
-            bool Qdrawn=false;
-            bool Rdrawn=false;
             do{
                 string PlayerTrackingN;
                 cout << string(80, '=')<<left << endl;
@@ -518,16 +505,16 @@ class PlayersProgression
                                 Qdrawn=true;
                                 continue;
                             }
+                            break;
                         
                         case 2:
                             if(!ScoreUpdated()){
                                 cout << "The match hasn't started yet.. wait for the score to be revealed"<<endl;
                                 continue;
-                             }else{
+                             }else if(ScoreUpdated() && !Rdrawn){
                                 assignPlayersRounds();
-                            
                             }
-                            if(Rdrawn){
+                            else if(Rdrawn){
                                 cout << " The Action has already been executed"<<endl;
                                 continue;
                             }
@@ -536,25 +523,25 @@ class PlayersProgression
                                 "Please come back later after the completion of qualifiers games" << endl;
                                 continue;
                             }
-                            else{
-                                handleRounds();
-                                Rdrawn=true;
-                                continue;
-                            }
-                        
+                            
+                            handleRounds();
+                            Rdrawn=true;
+                            break;
                         case 3:
                             knockoutsMenu();
-                            continue;
+                            break;
                         case 4:
                             cout << "Enter the Name of the player that you want to track the performance for: "<<endl;
                             cin.ignore(numeric_limits<streamsize> ::max(), '\n'); //skip reading the input buffer and clear it
                             getline(cin,PlayerTrackingN);
                             TrackingPlayers(PlayerTrackingN);
-                            continue;
-
+                            break;
                         case 5: 
                             clearScreen();
-                            continue;
+                            break;        
+                        case 6:
+                            break;
+                        
                         default:
                             cout << "Indefined action "<<endl;
                             break;
