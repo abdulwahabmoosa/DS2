@@ -1095,7 +1095,7 @@ public:
             cout << " 1. Qualifying Confirmation & Withdrawals" << endl;
             cout << " 2. Round Robin Confirmation & Withdrawals" << endl;
             cout << " 3. Semi-Finals Confirmation & Withdrawals" << endl;
-            cout << " 4. Final Confirmation" << endl; // New option
+            cout << " 4. Final Match Confirmation" << endl; // New option
             cout << " 5. Clear Screen" << endl;
             cout << " 6. Return to Main Menu" << endl; // Renumbered
             cout << string(80, '=') << left << endl;

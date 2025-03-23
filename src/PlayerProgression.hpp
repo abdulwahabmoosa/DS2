@@ -155,6 +155,7 @@ class PlayersProgression
                 cout << "Match Doesn't exist " <<endl;
             }
         }
+        
         void handleRounds(){
             ofstream file("csv/TennisTournament.csv", ios::app);
             roundRobin.RoundRobinMatches(file);        
@@ -508,10 +509,10 @@ class PlayersProgression
                             break;
                         
                         case 2:
-                            if(!ScoreUpdated()){
+                            if(!ScoreUpdatedKnockouts("QUL_", 8)){
                                 cout << "The match hasn't started yet.. wait for the score to be revealed"<<endl;
                                 continue;
-                             }else if(ScoreUpdated() && !Rdrawn){
+                             }else if(ScoreUpdatedKnockouts("QUL_", 8) && !Rdrawn){
                                 assignPlayersRounds();
                             }
                             else if(Rdrawn){
