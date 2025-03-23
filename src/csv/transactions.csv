@@ -1,3 +1,0 @@
-TransactionID,CustomerID,TicketID,Type,Timestamp
-TR1,C1,T1,PURCHASE,1742711787
-TR2,C1,T1,REFUND,1742711933
