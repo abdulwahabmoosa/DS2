@@ -1,10 +1,28 @@
 # Tennis Tournament Ticket Management System
-1. First, navigate to the correct directory:
+You can add these instructions to your README.md file like this:
 
-bashCopycd /path/to/your/src/directory
+```markdown
+## Building the Project
 
-2. Then run the compilation command:
+To compile the Ticket Management System:
+
+1. Navigate to the `src` directory:
+   ```bash
+   cd /path/to/your/src/directory
+   ```
+
+2. Run the compilation command:
+   ```bash
    g++ Main.cpp srcTicketManager/TicketManagement.cpp srcTicketManager/CircularQueue.cpp srcTicketManager/PriorityQueue.cpp srcTicketManager/QUEUE.cpp srcTicketManager/Stack.cpp srcTicketManager/TicketSystem.cpp -o Main
+   ```
+
+3. Run the executable:
+   ```bash
+   ./Main
+   ```
+```
+
+This format provides clear instructions with proper markdown formatting, including code blocks for the commands (which are formatted with ```bash to indicate they're bash shell commands). This makes the instructions easy to read and follow for anyone using your repository.
 ## Overview
 The Ticket Management System is a module of the APU Tennis Championship Management System that handles ticket sales and spectator management. This subsystem provides functionality for managing ticket sales across different customer priority levels, handling entry of spectators through gates, and processing refunds.
 
