@@ -463,7 +463,7 @@
     
     
     //Matches are sellable if status is "Confirmed" and winner is empty
-    return (status == "Confirmed" && winner.empty());
+    return (status == "Confirmed" || (winner.empty() && status=="Confirmed"));
 }
 
 

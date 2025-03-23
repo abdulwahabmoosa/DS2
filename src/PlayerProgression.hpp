@@ -64,27 +64,7 @@ class PlayersProgression
         
         //Checking if Score have been updated
         //---------------------------
-        // Round Robin Flag
-        bool ScoreUpdated(){
-            ifstream file("csv/TennisTournament.csv");
-    
-            if(!file){
-                cout  << "File cannot be openend";
-                return false;
-            }
-            string line;
-            getline(file, line);
-            istringstream ss(line);
-            string field;
-            while(getline(ss, field, ',')){
-                if(field.substr(field.find_first_not_of(' '))=="Winner"){
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        //Semi Final Flag
+        //Semi Final, Round Robin, Final Match Flag
         bool ScoreUpdatedKnockouts(string match, int length){
             ifstream file("csv/TennisTournament.csv");
     
