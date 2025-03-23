@@ -1,8 +1,8 @@
 # Tennis Tournament Ticket Management System
-You can add these instructions to your README.md file like this:
 
-```markdown
-## Building the Project
+
+
+
 
 To compile the Ticket Management System:
 
@@ -20,9 +20,8 @@ To compile the Ticket Management System:
    ```bash
    ./Main
    ```
-```
 
-This format provides clear instructions with proper markdown formatting, including code blocks for the commands (which are formatted with ```bash to indicate they're bash shell commands). This makes the instructions easy to read and follow for anyone using your repository.
+
 ## Overview
 The Ticket Management System is a module of the APU Tennis Championship Management System that handles ticket sales and spectator management. This subsystem provides functionality for managing ticket sales across different customer priority levels, handling entry of spectators through gates, and processing refunds.
 
