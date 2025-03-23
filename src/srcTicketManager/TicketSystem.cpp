@@ -11,6 +11,7 @@
  #include <algorithm>
  #include <ctime>
  using namespace std;
+ 
  // Constructor
  TicketSystem::TicketSystem(const string& dataDir, int gates)
      : numGates(gates), currentSalesPhase(3), dataDirectory(dataDir),
@@ -43,9 +44,10 @@
  bool TicketSystem::initialize() {
      // Create data directory if it doesn't exist
      //string command = "mkdir -p " + dataDirectory;
-     string command = "mkdir -p " + dataDirectory + "../csv";
-     system(command.c_str());
-     cout << "Data directory created: " << command << endl;
+     //string command = "mkdir -p " + dataDirectory + "csv";
+     //cout << "Trying to create directory: " << dataDirectory + "csv" << endl;
+     //system(command.c_str());
+     //cout << "Data directory created: " << command << endl;
      
      
      // Load data from files
@@ -59,8 +61,13 @@
     matches.clear();
     tickets.clear();
     
+
+   
+   
     // Load customers
-    ifstream customersFile(dataDirectory + "csv/customers.csv");
+    ifstream customersFile( dataDirectory + "csv/customers.csv");
+    cout << dataDirectory<< endl;
+
     if (customersFile.is_open()) {
         string line;
         // Skip header
@@ -80,13 +87,18 @@
             
             customers.push_back(Customer(id, name, email, phone, priority));
         }
+
         
         customersFile.close();
+    }
+    else {
+        cerr << "Error: Could not open customers.csv for reading" << endl;
+        return false;
     }
     
     // Load matches from TennisTournament.csv
     ifstream matchesFile(dataDirectory + "csv/TennisTournament.csv");
-    cout << dataDirectory + "/TennisTournament.csv" << endl;
+    cout << dataDirectory + "csv/TennisTournament.csv" << endl;
     if (matchesFile.is_open()) {
         string line;
         // Skip header
@@ -122,9 +134,40 @@
         
         matchesFile.close();
     }
+
+
+    // Load transactions
+    ifstream transactionsFile(dataDirectory + "csv/transactions.csv");
+    if (transactionsFile.is_open()) {
+        string line;
+        // Skip header
+        getline(transactionsFile, line);
+        
+        while (getline(transactionsFile, line)) {
+            stringstream ss(line);
+            string id, customerID, ticketID, type, timestampStr;
+            
+            getline(ss, id, ',');
+            getline(ss, customerID, ',');
+            getline(ss, ticketID, ',');
+            getline(ss, type, ',');
+            getline(ss, timestampStr, ',');
+            
+            // Convert timestamp string to time_t
+            time_t timestamp = stol(timestampStr);
+            
+            // Create transaction and push to stack
+            Transaction transaction(id, customerID, ticketID, type);
+            transaction.timestamp = timestamp;
+            
+            transactionHistory.push(transaction);
+        }
+        
+        cout << "Loaded " << transactionHistory.getSize() << " transactions." << endl;
+    }
     
     // Load tickets
-    ifstream ticketsFile(dataDirectory + "scv/tickets.csv");
+    ifstream ticketsFile(dataDirectory + "csv/tickets.csv");
     if (ticketsFile.is_open()) {
         string line;
         // Skip header
@@ -188,86 +231,6 @@
 
 
 
- 
- // Save data to CSV files
- /*bool TicketSystem::saveData() {
-     // Save customers
-     ofstream customersFile(dataDirectory + "csv/customers.csv");
-     if (customersFile.is_open()) {
-         // Write header
-         customersFile << "CustomerID,Name,Email,Phone,PriorityLevel" << endl;
-         
-         // Write data
-         for (const Customer& customer : customers) {
-             customersFile << customer.customerID << ","
-                           << customer.name << ","
-                           << customer.email << ","
-                           << customer.phone << ","
-                           << customer.priorityLevel << endl;
-         }
-         
-         customersFile.close();
-     } else {
-         cerr << "Error: Could not open customers.csv for writing" << endl;
-         return false;
-     }
-     
-     // Save tickets
-     ofstream ticketsFile(dataDirectory + "csv/tickets.csv");
-     if (ticketsFile.is_open()) {
-         // Write header
-         ticketsFile << "TicketID,MatchID,CustomerID,Category,Price,SeatNumber,Status,PurchaseTime" << endl;
-         
-         // Write data
-         for (const Ticket& ticket : tickets) {
-             ticketsFile << ticket.ticketID << ","
-                         << ticket.matchID << ","
-                         << ticket.customerID << ","
-                         << ticket.category << ","
-                         << ticket.price << ","
-                         << ticket.seatNumber << ","
-                         << ticket.status << ","
-                         << ticket.purchaseTime << endl;
-         }
-         
-         ticketsFile.close();
-     } else {
-         cerr << "Error: Could not open tickets.csv for writing" << endl;
-         return false;
-     }
-     
-     // Save transactions
-     ofstream transactionsFile(dataDirectory + "csv/transactions.csv");
-     if (transactionsFile.is_open()) {
-         //extract transactions from the stack
-         // Since we can't iterate through a stack without modifying it,
-         // use a temporary stack
-         Stack tempStack = transactionHistory;
-         
-         // Write header
-         transactionsFile << "TransactionID,CustomerID,TicketID,Type,Timestamp" << endl;
-         
-         // Write data
-         while (!tempStack.isEmpty()) {
-             Transaction transaction = tempStack.pop();
-             transactionsFile << transaction.transactionID << ","
-                             << transaction.customerID << ","
-                             << transaction.ticketID << ","
-                             << transaction.type << ","
-                             << transaction.timestamp << endl;
-         }
-         
-         transactionsFile.close();
-     } else {
-         cerr << "Error: Could not open transactions.csv for writing" << endl;
-         return false;
-     }
-     
-     cout << "Saved " << customers.size() << " customers, " 
-               << tickets.size() << " tickets, and transaction history." << endl;
-     
-     return true;
- }*/
 
  bool TicketSystem::saveData() {
     // Save customers
@@ -603,10 +566,23 @@
              price = 50.0;
      }
      
-     // Allocate a seat
-     if (venueCapacity == nullptr) {
-         venueCapacity = new CircularQueue(100, match->matchID == "M1" ? 3 : (match->matchID == "M2" ? 2 : 1));
-     }
+     // Create venue capacity if it doesn't exist
+        if (venueCapacity == nullptr) {
+            // Initialize with default category based on match type
+            int category = 1; // Default to general
+            
+            // You can use match prefix to determine category if needed
+            string prefix = match->matchID.substr(0, 3);
+            if (prefix == "QUL") {
+                category = 3; // Qualifier matches are VIP
+            } else if (prefix == "ROU") {
+                category = 2; // Round matches are Early-Bird
+            } else if (prefix == "Semi" || prefix == "FINA") {
+                category = 3; // Semi-finals and Final are VIP
+            }
+            
+            venueCapacity = new TicketCircularQueue(100, category);
+        }
      
      int seatNumber = venueCapacity->getNextAvailableSeat(request.customer.priorityLevel);
      if (seatNumber == -1) {
@@ -673,11 +649,11 @@
          return false;
      }
      
-     // Check if match is already completed
-     if (match->status == "COMPLETED") {
-         cerr << "Error: Cannot refund ticket for completed match: " << ticket->matchID << endl;
-         return false;
-     }
+     // Use isMatchSellable method to check if match is still available for tickets
+    if (!isMatchSellable(match)) {
+        cerr << "Error: Cannot refund ticket - match is no longer available for ticket operations: " << ticket->matchID << endl;
+        return false;
+    }
      
      // Update ticket status
      ticket->status = "REFUNDED";
@@ -727,11 +703,11 @@
          return false;
      }
      
-     // Check if match is scheduled or in progress
-     if (match->status != "SCHEDULED" && match->status != "IN_PROGRESS") {
-         cerr << "Error: Match is not active: " << match->status << endl;
-         return false;
-     }
+     //Check if match is sellable (available for tickets and entry)
+    if (!isMatchSellable(match)) {
+        cerr << "Error: Match is not available for entry: " << match->status <<endl;
+        return false;
+    }
      
      // Check if gate is appropriate for ticket category
      bool validGate = false;
@@ -762,42 +738,66 @@
      return true;
  }
  
- // Add spectator to entry queue
+ 
  bool TicketSystem::addToEntryQueue(const string& customerID, const string& ticketID, int gateNumber) {
-     // Validate gate number
-     if (gateNumber < 1 || gateNumber > numGates) {
-         cerr << "Error: Invalid gate number: " << gateNumber << endl;
-         return false;
-     }
-     
-     // Find ticket
-     Ticket* ticket = findTicket(ticketID);
-     if (ticket == nullptr) {
-         cerr << "Error: Ticket not found: " << ticketID << endl;
-         return false;
-     }
-     
-     // Check if ticket is valid
-     if (ticket->status != "SOLD") {
-         cerr << "Error: Invalid ticket status: " << ticket->status << endl;
-         return false;
-     }
-     
-     // Check if customer matches ticket
-     if (ticket->customerID != customerID) {
-         cerr << "Error: Ticket does not belong to customer: " << customerID << endl;
-         return false;
-     }
-     
-     // Add to queue
-     bool success = entryGates[gateNumber - 1].enqueue(customerID, ticketID);
-     
-     if (success) {
-         cout << "Added spectator to gate " << gateNumber << " queue." << endl;
-     }
-     
-     return success;
- }
+    // Find ticket
+    Ticket* ticket = findTicket(ticketID);
+    if (ticket == nullptr) {
+        cerr << "Error: Ticket not found: " << ticketID << endl;
+        return false;
+    }
+    
+    // Check if ticket is valid
+    if (ticket->status != "SOLD") {
+        cerr << "Error: Invalid ticket status: " << ticket->status << endl;
+        return false;
+    }
+    
+    // Check if customer matches ticket
+    if (ticket->customerID != customerID) {
+        cerr << "Error: Ticket does not belong to customer: " << customerID << endl;
+        return false;
+    }
+    
+    // Determine appropriate gate based on ticket category
+    int appropriateGate;
+    string gateType;
+    
+    switch (ticket->category) {
+        case 3: // VIP
+            appropriateGate = 1;
+            gateType = "VIP";
+            break;
+        case 2: // Early-Bird
+            appropriateGate = (gateNumber == 2 || gateNumber == 3) ? gateNumber : 2;
+            gateType = "Early-Bird";
+            break;
+        case 1: // General
+            appropriateGate = 4;
+            gateType = "General";
+            break;
+        default:
+            cerr << "Error: Unknown ticket category: " << ticket->category << endl;
+            return false;
+    }
+    
+    // Check if specified gate is valid for this ticket category
+    if (gateNumber != appropriateGate) {
+        cout << "Notice: Redirecting from gate " << gateNumber 
+                  << " to gate " << appropriateGate 
+                  << " appropriate for " << gateType << " tickets." << endl;
+        gateNumber = appropriateGate;
+    }
+    
+    // Add to queue
+    bool success = entryGates[gateNumber - 1].enqueue(customerID, ticketID);
+    
+    if (success) {
+        cout << "Added spectator to gate " << gateNumber << " queue." << endl;
+    }
+    
+    return success;
+}
  
  // Process next spectator at a gate
  bool TicketSystem::processNextEntry(int gateNumber) {
@@ -941,7 +941,7 @@ void TicketSystem::displayTickets() const {
     }
     
     // Print header
-    cout << "\n============================= TICKETS =============================" << endl;
+    cout << "\n======================================== TICKETS =========================================" << endl;
     cout << setw(10) << "Ticket ID" << " | " 
               << setw(10) << "Match ID" << " | " 
               << setw(12) << "Customer ID" << " | " 
@@ -973,7 +973,8 @@ void TicketSystem::displayTickets() const {
                   << setw(10) << ticket.matchID << " | " 
                   << setw(12) << ticket.customerID << " | " 
                   << setw(10) << categoryLabel << " | " 
-                  << setw(10) << "$" << fixed << setprecision(2) << ticket.price << " | " 
+                  //<< setw(10) << "$" << fixed << setprecision(2) << ticket.price << " | " 
+                  << setw(10) << ("$" + to_string(int(ticket.price))) << " | "
                   << setw(10) << ticket.seatNumber << " | " 
                   << setw(10) << ticket.status << endl;
     }
@@ -994,22 +995,131 @@ void TicketSystem::displayTickets() const {
  }
  
  void TicketSystem::displayVenueSeating(const string& matchID) const {
-     if (venueCapacity == nullptr) {
-         cout << "No venue seating data available." << endl;
-         return;
-     }
-     
-     venueCapacity->displaySeating();
- }
- 
- void TicketSystem::displayTransactionHistory(int count) const {
-     transactionHistory.displayRecent(count);
- }
- 
- void TicketSystem::searchTransactionsByCustomer(const string& customerID) const {
-     transactionHistory.searchByCustomer(customerID);
- }
- 
- void TicketSystem::searchTransactionsByTicket(const string& ticketID) const {
-     transactionHistory.searchByTicket(ticketID);
- }
+    // Validate match exists
+    Match* match = nullptr;
+    for (int i = 0; i < matches.size(); i++) {
+        if (matches[i].matchID == matchID) {
+            Match tempMatch = matches[i];
+            match = &tempMatch;
+            break;
+        }
+    }
+    
+    if (match == nullptr) {
+        cout << "Error: Match with ID '" << matchID << "' was not found." << endl;
+        return;
+    }
+    
+    // For viewing venue seating without tickets sold, initialize with default capacity
+    if (venueCapacity == nullptr) {
+        // This cast is necessary because displayVenueSeating is const
+        TicketSystem* nonConstThis = const_cast<TicketSystem*>(this);
+        
+        // Initialize with default category
+        int category = 1;
+        string prefix = matchID.substr(0, 3);
+        if (prefix == "QUL") {
+            category = 3;
+        } else if (prefix == "ROU") {
+            category = 2;
+        } else if (prefix == "Semi" || prefix == "FINA") {
+            category = 3;
+        }
+        
+        // Create new venue capacity
+        nonConstThis->venueCapacity = new TicketCircularQueue(100, category);
+        
+        // Load existing ticket data for this match
+        for (int i = 0; i < tickets.size(); i++) {
+            const Ticket& ticket = tickets[i];
+            
+            // Only allocate seats for tickets that are for this match and are SOLD (not REFUNDED or USED)
+            if (ticket.matchID == matchID && ticket.status == "SOLD") {
+                // Convert seat number to integer
+                int seatNumber = stoi(ticket.seatNumber);
+                
+                // Allocate the seat in the venue
+                nonConstThis->venueCapacity->allocateSeat(seatNumber, ticket.customerID, ticket.ticketID);
+            }
+        }
+        
+        cout << "Initialized venue seating arrangement for match " << matchID 
+             << " with existing ticket data." << endl;
+    }
+    
+    // Display the seating arrangement
+    venueCapacity->displaySeating();
+}
+
+//display transaction history
+void TicketSystem::displayTransactionHistory(int count) const {
+    // Validate count parameter
+    if (count <= 0) {
+        cout << "Error: Number of transactions must be greater than zero." << endl;
+        return;
+    }
+    
+    // Check if transaction history exists
+    if (transactionHistory.getSize() == 0) {
+        cout << "No transaction history available." << endl;
+        return;
+    }
+    
+    // Display transaction history
+    cout << "\n----- Recent Transaction History -----" << endl;
+    transactionHistory.displayRecent(count);
+}
+
+//display customer transactions
+void TicketSystem::searchTransactionsByCustomer(const string& customerID) const {
+    // Validate customer ID
+    if (customerID.empty()) {
+        cout << "Error: Customer ID cannot be empty." << endl;
+        return;
+    }
+    
+    // Check if customer exists
+    bool customerExists = false;
+    for (int i = 0; i < customers.size(); i++) {
+        if (customers[i].customerID == customerID) {
+            customerExists = true;
+            break;
+        }
+    }
+    
+    if (!customerExists) {
+        cout << "Error: Customer with ID '" << customerID << "' was not found." << endl;
+        return;
+    }
+    
+    // Display customer transactions
+    cout << "\n----- Transactions for Customer " << customerID << " -----" << endl;
+    transactionHistory.searchByCustomer(customerID);
+}
+
+// display ticket transactions
+void TicketSystem::searchTransactionsByTicket(const string& ticketID) const {
+    // Validate ticket ID
+    if (ticketID.empty()) {
+        cout << "Error: Ticket ID cannot be empty." << endl;
+        return;
+    }
+    
+    // Check if ticket exists
+    bool ticketExists = false;
+    for (int i = 0; i < tickets.size(); i++) {
+        if (tickets[i].ticketID == ticketID) {
+            ticketExists = true;
+            break;
+        }
+    }
+    
+    if (!ticketExists) {
+        cout << "Error: Ticket with ID '" << ticketID << "' was not found." << endl;
+        return;
+    }
+    
+    // Display ticket transactions
+    cout << "\n----- Transactions for Ticket " << ticketID << " -----" << endl;
+    transactionHistory.searchByTicket(ticketID);
+}

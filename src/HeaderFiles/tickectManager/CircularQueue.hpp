@@ -19,7 +19,7 @@
    //This circular queue tracks seat availability and allocations for tennis matches.
   //It uses a circular buffer to efficiently manage fixed capacity venues.
   
- class CircularQueue {
+ class TicketCircularQueue {
  private:
      
       //Structure to track information about each seat
@@ -49,13 +49,12 @@
      
  public:
      
-      //Constructor
       //Initializes a circular queue with the specified capacity and match category
-     CircularQueue(int capacity = 100, int category = 1);
+     TicketCircularQueue(int capacity = 100, int category = 1);
      
      
       //Properly deallocates the seats array
-     ~CircularQueue();
+     ~TicketCircularQueue();
      
      
       //Allocate a specific seat

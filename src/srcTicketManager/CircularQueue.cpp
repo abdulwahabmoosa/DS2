@@ -1,5 +1,5 @@
 /*
- This file implements all methods defined in CircularQueue.hpp.
+ This file implements all methods defined in TicketCircularQueue.hpp.
  The circular queue manages seat allocations for tennis matches.
  */
 
@@ -11,7 +11,7 @@
  
  
  // Constructor
- CircularQueue::CircularQueue(int capacity, int category) 
+ TicketCircularQueue::TicketCircularQueue(int capacity, int category) 
      : capacity(capacity), front(0), rear(capacity - 1), matchCategory(category) {
      
      //Allocate memory for seats
@@ -24,23 +24,23 @@
  }
  
  //Destructor
- CircularQueue::~CircularQueue() {
+ TicketCircularQueue::~TicketCircularQueue() {
      //Free allocated memory
      delete[] seats;
  }
  
  //Get next index in circular fashion
- int CircularQueue::getNextIndex(int index) const {
+ int TicketCircularQueue::getNextIndex(int index) const {
      return (index + 1) % capacity;
  }
  
  //Get previous index in circular fashion
- int CircularQueue::getPrevIndex(int index) const {
+ int TicketCircularQueue::getPrevIndex(int index) const {
      return (index - 1 + capacity) % capacity;
  }
  
  // Allocate a specific seat
- bool CircularQueue::allocateSeat(int seatNumber, const string& customerID, const string& ticketID) {
+ bool TicketCircularQueue::allocateSeat(int seatNumber, const string& customerID, const string& ticketID) {
      // Validate seat number
      if (seatNumber < 1 || seatNumber > capacity) {
          cerr << "Error: Invalid seat number " << seatNumber <<endl;
@@ -65,7 +65,7 @@
  }
  
  // Deallocate (free) a specific seat
- bool CircularQueue::deallocateSeat(int seatNumber) {
+ bool TicketCircularQueue::deallocateSeat(int seatNumber) {
      // Validate seat number
      if (seatNumber < 1 || seatNumber > capacity) {
          cerr << "Error: Invalid seat number " << seatNumber <<endl;
@@ -90,7 +90,7 @@
  }
  
  // Check if a specific seat is allocated
- bool CircularQueue::isSeatAllocated(int seatNumber) const {
+ bool TicketCircularQueue::isSeatAllocated(int seatNumber) const {
      // Validate seat number
      if (seatNumber < 1 || seatNumber > capacity) {
          cerr << "Error: Invalid seat number " << seatNumber <<endl;
@@ -104,7 +104,7 @@
  }
  
  // Get the next available seat number based on ticket category
- int CircularQueue::getNextAvailableSeat(int category) const {
+ int TicketCircularQueue::getNextAvailableSeat(int category) const {
      // Define seat ranges based on category
      int startSeat, endSeat;
      
@@ -163,7 +163,7 @@
  }
  
  // Get ticket ID for a seat
- string CircularQueue::getTicketIDForSeat(int seatNumber) const {
+ string TicketCircularQueue::getTicketIDForSeat(int seatNumber) const {
      // Validate seat number
      if (seatNumber < 1 || seatNumber > capacity) {
          cerr << "Error: Invalid seat number " << seatNumber <<endl;
@@ -177,7 +177,7 @@
  }
  
  // Get customer ID for a seat
- string CircularQueue::getCustomerIDForSeat(int seatNumber) const {
+ string TicketCircularQueue::getCustomerIDForSeat(int seatNumber) const {
      // Validate seat number
      if (seatNumber < 1 || seatNumber > capacity) {
          cerr << "Error: Invalid seat number " << seatNumber <<endl;
@@ -191,7 +191,7 @@
  }
  
  // Count total allocated seats
- int CircularQueue::getAllocatedSeatsCount() const {
+ int TicketCircularQueue::getAllocatedSeatsCount() const {
      int count = 0;
      
      for (int i = 0; i < capacity; i++) {
@@ -204,22 +204,22 @@
  }
  
  // Count available seats
- int CircularQueue::getAvailableSeatsCount() const {
+ int TicketCircularQueue::getAvailableSeatsCount() const {
      return capacity - getAllocatedSeatsCount();
  }
  
  // Check if venue is full
- bool CircularQueue::isFull() const {
+ bool TicketCircularQueue::isFull() const {
      return getAllocatedSeatsCount() == capacity;
  }
  
  // Check if venue is empty
- bool CircularQueue::isEmpty() const {
+ bool TicketCircularQueue::isEmpty() const {
      return getAllocatedSeatsCount() == 0;
  }
  
  // Display seating arrangement
- void CircularQueue::displaySeating() const {
+ void TicketCircularQueue::displaySeating() const {
      // Print header
      cout << "\n----- Venue Seating Arrangement -----" << endl;
      cout << "Total Capacity: " << capacity << " seats" << endl;
@@ -252,7 +252,7 @@
      }
      cout <<endl;
      
-     // Display General section
+     // Display General section  
      cout << "\n" << generalSection << ":" <<endl;
      cout <<string(generalSection.length(), '-') <<endl;
      for (int i = 60; i < capacity; i++) {

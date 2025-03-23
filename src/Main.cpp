@@ -3,8 +3,7 @@
 #include "MatchHistory.hpp"              // Header file for match history tracking
 #include "PlayerProgression.hpp"         // Header file for player progression
 #include "HandleWithdraw.hpp"
-#include "HandleDeposit.hpp"
-#include "HeaderFiles/tickectManager/TicketManagement.hpp" 
+#include "HeaderFiles/tickectManager/TicketManagement.hpp"
 
 using namespace std;
 

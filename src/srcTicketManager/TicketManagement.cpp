@@ -188,7 +188,7 @@ void TicketManagement::handleTicketRefunds() {
     
     pauseScreen();
 }
-
+/*
 // Handle entry management
 void TicketManagement::handleEntryManagement() {
     int choice = 0;
@@ -247,6 +247,151 @@ void TicketManagement::handleEntryManagement() {
                 cin.clear();
                 cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 
+                if (ticketSystem.processNextEntry(gateNumber)) {
+                    cout << "Entry processed successfully." << endl;
+                }
+                pauseScreen();
+                break;
+            
+            case 4:
+                // Return to main menu
+                break;
+            
+            default:
+                cout << "Invalid choice. Please try again." << endl;
+                pauseScreen();
+        }
+    }
+}
+*/
+
+// Updated Entry Management handling
+void TicketManagement::handleEntryManagement() {
+    int choice = 0;
+    
+    while (choice != 4) {
+        clearScreen();
+        cout << "============= ENTRY MANAGEMENT =============" << endl;
+        
+        cout << "\n1. View Entry Queues" << endl;
+        cout << "2. Add Spectator to Entry Queue" << endl;
+        cout << "3. Process Next Entry" << endl;
+        cout << "4. Return to Main Menu" << endl;
+        
+        cout << "\nEnter your choice: ";
+        if (!(cin >> choice)) {
+            cout << "Invalid input. Please enter a number." << endl;
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            pauseScreen();
+            continue;
+        }
+        
+        // Clear input buffer
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        
+        string customerID, ticketID;
+        int gateNumber;
+        
+        switch (choice) {
+            case 1:
+                // View entry queues
+                ticketSystem.displayEntryQueues();
+                pauseScreen();
+                break;
+            
+            case 2:{
+                // Add spectator to entry queue
+                ticketSystem.displayTickets();
+                
+                bool validInput = false;
+                while (!validInput) {
+                    // Validate ticket ID
+                    cout << "\nEnter ticket ID (or 'x' to cancel): ";
+                    getline(cin, ticketID);
+                    
+                    if (ticketID == "x") {
+                        cout << "Operation cancelled." << endl;
+                        pauseScreen();
+                        break; // Exit the while loop and the case
+                    }
+                    
+                    if (ticketID.empty()) {
+                        cout << "Error: Ticket ID cannot be empty. Please try again." << endl;
+                        continue; // Skip to next iteration, asking for input again
+                    }
+                    
+                    // Check if Ticket ID follows the correct format
+                    if (ticketID[0] != 'T') {
+                        cout << "Error: Invalid Ticket ID format. Ticket ID should start with 'T'. Please try again." << endl;
+                        continue; // Skip to next iteration, asking for input again
+                    }
+                    
+                    // Ticket ID looks valid, now get customer ID
+                    cout << "Enter customer ID: ";
+                    getline(cin, customerID);
+                    
+                    if (customerID.empty()) {
+                        cout << "Error: Customer ID cannot be empty. Please try again." << endl;
+                        continue; // Start over from ticket ID
+                    }
+                    
+                    // Check if Customer ID follows the correct format
+                    if (customerID[0] != 'C') {
+                        cout << "Error: Invalid Customer ID format. Customer ID should start with 'C'. Please try again." << endl;
+                        continue; // Start over from ticket ID
+                    }
+                    
+                    // Both inputs are valid, proceed to gate selection
+                    cout << "Enter desired gate number (1-4):" << endl;
+                    cout << "Note: The system will automatically redirect to the appropriate gate" << endl;
+                    cout << "      Gate 1: VIP tickets only" << endl;
+                    cout << "      Gates 2-3: Early-Bird tickets" << endl;
+                    cout << "      Gate 4: General tickets" << endl;
+                    
+                    if (!(cin >> gateNumber) || gateNumber < 1 || gateNumber > 4) {
+                        cout << "Invalid gate number. Please enter a number between 1 and 4." << endl;
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                        continue; // Start over from ticket ID
+                    }
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    
+                    // All inputs validated successfully
+                    validInput = true;
+                }
+                
+                // If we got here without breaking, inputs are valid
+                if (validInput) {
+                    // Process the request
+                    if (ticketSystem.addToEntryQueue(customerID, ticketID, gateNumber)) {
+                        cout << "Spectator added to queue successfully." << endl;
+                    }
+                }
+                
+                pauseScreen();
+                break;
+                }
+            
+            case 3:
+                // Process next entry
+                ticketSystem.displayEntryQueues();
+                
+                // Validate gate number
+                cout << "\nEnter gate number (1-4): ";
+                if (!(cin >> gateNumber) || gateNumber < 1 || gateNumber > 4) {
+                    cout << "Invalid gate number. Please try again." << endl;
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    pauseScreen();
+                    break;
+                }
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                
+                // Process entry
                 if (ticketSystem.processNextEntry(gateNumber)) {
                     cout << "Entry processed successfully." << endl;
                 }

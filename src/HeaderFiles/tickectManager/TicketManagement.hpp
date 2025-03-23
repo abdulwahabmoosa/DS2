@@ -1,7 +1,7 @@
 #ifndef TICKET_MANAGEMENT_HPP
 #define TICKET_MANAGEMENT_HPP
 
-#include "../HeaderFiles/tickectManager/TicketSystem.hpp"
+#include "TicketSystem.hpp"
 
 
   //This class provides the interface to the ticket system that can be called

@@ -32,7 +32,7 @@
      // Array of entry gates (queues)
      Queue* entryGates;
      // For tracking seat availability
-     CircularQueue* venueCapacity;
+     TicketCircularQueue* venueCapacity;
      // For tracking all transactions
      Stack transactionHistory;
      
@@ -80,7 +80,7 @@
      
  public:
      // Constructor
-     TicketSystem(const string& dataDir = "../", int gates = 4);
+     TicketSystem(const string& dataDir = "", int gates = 4);
      
      // Destructor
      ~TicketSystem();
