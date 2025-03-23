@@ -1,8 +1,3 @@
-# Tennis Tournament Ticket Management System
-
-
-
-
 
 To compile the Ticket Management System:
 
