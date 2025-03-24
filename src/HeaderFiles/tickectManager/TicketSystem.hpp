@@ -258,12 +258,7 @@ public:
             
             ticketsFile.close();
         }
-        
-        // If no matches loaded, notify user
-        if (matches.size() == 0) {
-            cerr << "Warning: No matches found in TennisTournament.csv" << endl;
-            cerr << "Please ensure the file exists in the data directory." << endl;
-        }
+
         
         // If no customers, create some sample data
         if (customers.empty()) {
@@ -355,9 +350,7 @@ public:
             cerr << "Error: Could not open transactions.csv for writing" << endl;
             return false;
         }
-    
-        cout << "Saved " << customers.size() << " customers, " 
-             << tickets.size() << " tickets, and transaction history." << endl;
+
     
         return true;
     }
@@ -470,7 +463,6 @@ public:
          string customerID = "C" + to_string(customers.size() + 1);
          customers.push_back(Customer(customerID, name, email, phone, priority));
          
-         cout << "Added new customer: " << name << " (" << customerID << ")" << endl;
          return customerID;
      }
      

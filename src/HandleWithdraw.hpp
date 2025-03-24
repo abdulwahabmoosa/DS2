@@ -538,11 +538,15 @@ public:
     
         // Determine maximum possible injuries
         int maxInjuries = queue.size();
-        int injuriesToGenerate = min(maxInjuries, matchCount);
-        if (injuriesToGenerate == 0) {
+        if (maxInjuries == 0) {
             cout << "No eligible replacements available in the queue." << endl;
             return;
         }
+        
+        // Generate a random number of injuries between 1 and maxInjuries
+        int injuriesToGenerate = 1 + (rand() % maxInjuries);
+        // Make sure we don't try to generate more injuries than we have matches
+        injuriesToGenerate = min(injuriesToGenerate, matchCount);
     
         cout << "\nAfter medical evaluations, we have determined there are " 
              << injuriesToGenerate << " players who need to withdraw." << endl;
