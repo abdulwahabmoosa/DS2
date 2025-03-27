@@ -36,51 +36,6 @@ public:
         cout << "\033[2J\033[H";
     }
 
-           //Change game status to confirmed
-           void changeGameStatus(){
-            ifstream inFile("csv/TennisTournament.csv");
-            ofstream outFile("csv/TennisTournament_temp.csv");
-            
-            if (!inFile) {
-                cout << "Input file not found" << endl;
-                return;
-            }
-            
-            if (!outFile) {
-                cout << "Cannot create output file" << endl;
-                inFile.close();
-                return;
-            }
-            
-            string line;
-            
-            // Copy the header line as is
-            getline(inFile, line);
-            outFile << line << endl;
-            
-            // Process each data line
-            while (getline(inFile, line)) {
-                // Replace "Unconfirmed" with "Confirmed" in the current line
-                size_t pos = line.find("Unconfirmed");
-                if (pos != string::npos) {
-                    line.replace(pos, 11, "Confirmed");
-                }
-                
-                // Write the modified line to the new file
-                outFile << line << endl;
-            }
-            
-            // Close both files
-            inFile.close();
-            outFile.close();
-            
-            // Replace the original file with the new one
-            remove("csv/TennisTournament.csv");
-            rename("csv/TennisTournament_temp.csv", "csv/TennisTournament.csv");
-            
-            cout << "All matches confirmed successfully" << endl;
-        
-        }
     // Check if all qualifier matches have been scored
 bool allQualifiersScored() {
     ifstream csvFile("csv/TennisTournament.csv");

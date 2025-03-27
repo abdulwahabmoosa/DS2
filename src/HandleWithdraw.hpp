@@ -426,29 +426,6 @@ public:
         cout << "Total withdrawals processed in qualifier round: " << actualWithdrawals << endl;
     }
     
-    // Handle round robin withdrawals
-    // void roundRobinConfirm() {
-    //     cout << "REVIEWING ROUND ROBIN MATCHES FOR PLAYER WITHDRAWALS" << endl;
-    //     cout << string(80, '-') << endl;
-        
-    //     // Check if round robin matches exist
-    //     if (!matchesExist("ROU")) {
-    //         cout << "No round robin matches found in the tournament schedule." << endl;
-    //         return;
-    //     }
-        
-    //     // Check if round robin matches have already been played
-    //     if (hasWinners("ROU")) {
-    //         cout << "Round robin matches have already been played. Cannot process withdrawals." << endl;
-    //         return;
-    //     }
-        
-    //     cout << "\nRound Robin withdrawal processing will be implemented in a future update." << endl;
-    //     cout << "This functionality is currently under development." << endl;
-        
-    //     // Space for future implementation of round robin withdrawals
-    // }
-    
     void roundRobinConfirm() {
         cout << "REVIEWING ROUND ROBIN MATCHES FOR PLAYER WITHDRAWALS" << endl;
         cout << string(80, '-') << endl;
